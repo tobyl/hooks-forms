@@ -1,68 +1,63 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Hooks Forms
 
-## Available Scripts
+Built using create-react-app.
 
-In the project directory, you can run:
+1. Install: `yarn install`
+2. Run: `yarn start`
 
-### `yarn start`
+Or equivalent NPM commands.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Basic structure
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+There are three levels to the multi-page forms:
 
-### `yarn test`
+1. The root Form.js, which holds the data and handles basic data setting, updating and removing. This is structured this way so that each Form, Fieldset and Field is able to access data.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Fieldsets, created in each form. There is no root element, they exist only to define the individual pages/fieldsets of each form.
 
-### `yarn build`
+3. The fields, which use a custom hook (forms/fields/utils/useField.js) to handle pulling data from the form, and a separate file for each field type (Text.js, Select.js, etc). It is possible to handle all field types in a single file, but I have found that having separate files makes it easier and clearer to manage styling and field-specific functionality.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Common use cases
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+The critical functionality for the forms is React Context (useContext Hook). The context is created in Form.js, meaning that at any point below this in form, fieldset or field you can call context and access the data and setters directly:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+const form = useContext(FormContext)
 
-### `yarn eject`
+console.log(form.data)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+form.setValue('field_name', 'Some value!')
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+console.log(form.data['field_name'])
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+In a fieldset, you might want to compare two values and take action. For example:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+const form = useContext(FormContext)
 
-## Learn More
+const CompareVals = value => {
+  const firstVal = form.data['first_field']
+  const secondVal = form.data['second_field']
+  if (firstVal === secondVal) {
+    form.setValue('third_field', 'Some Value')
+  }
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Every field will accept a `ChangeCallback` prop - this is how you ensure that the function above is called when a specific field changes:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+return (
+  <Text
+    name="first_field"
+    ChangeCallback={CompareVals}
+  />
+  <Text
+    name="second_field"
+    ChangeCallback={CompareVals}
+  />
+)
+```
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Teh callback is called with the changed value, in case you want to run a comparison based on that value directly.
