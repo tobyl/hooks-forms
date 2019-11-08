@@ -8,7 +8,7 @@ function App() {
       <h1>Welcome to the App!</h1>
       <ul>
         <li>
-          <Link to="/signup">Signup Form</Link>
+          <Link to="/signup/get-started">Signup Form</Link>
         </li>
       </ul>
       <Route path="/signup">

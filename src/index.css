@@ -16,15 +16,25 @@ fieldset {
   padding: 0;
 }
 
-input,
-select {
+.field {
+  margin-bottom: 1rem;
+}
+
+.field input,
+.field select {
   appearance: none;
   font: inherit;
   color: inherit;
   width: 100%;
-  margin: 0 0 1rem 0;
+  margin: 0;
   padding: 0.5rem;
   border: 1px solid #777;
   background: #fff;
   border-radius: 4px;
+}
+
+.field-error {
+  color: red;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }

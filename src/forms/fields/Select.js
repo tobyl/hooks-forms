@@ -2,9 +2,9 @@ import React from 'react'
 import classNames from 'classnames'
 import useField from './utils/fieldHook'
 
-const Select = ({ name, choices }) => {
+const Select = ({ name, choices, ChangeCallback }) => {
 
-  const { value, onChange, onFocus, onBlur, active, touched, error } = useField(name)
+  const { value, onChange, onFocus, onBlur, active, touched, error } = useField(name, ChangeCallback)
 
   const cls = classNames('field select-field', {
     'active': active,
@@ -35,6 +35,7 @@ const Select = ({ name, choices }) => {
         <option value={-1}>Select...</option>
         {getOptions()}
       </select>
+      {error && <div className="field-error">{error}</div>}
     </div>
   )
 }

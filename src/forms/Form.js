@@ -5,6 +5,7 @@ import FormNav from './FormNav'
 export const FormContext = React.createContext()
 
 const Form = ({ children }) => {
+  
   const [data, setData] = useState({})
   const [errors, setErrors] = useState({})
 
@@ -29,10 +30,8 @@ const Form = ({ children }) => {
   }
 
   const renderChild = Child => {
-    
-
     if (getCurrent() === Child.props.slug) {
-      return <Route path={'/'} render={() => Child} />
+      return <Route render={() => Child} />
     }
   }
 
@@ -47,7 +46,10 @@ const Form = ({ children }) => {
           current={getCurrent()}
         />
         <pre>
-          {JSON.stringify(data, null, 2)}
+          Data {JSON.stringify(data, null, 2)}
+        </pre>
+        <pre>
+          Errors {JSON.stringify(errors, null, 2)}
         </pre>
       </form>
     </FormContext.Provider>

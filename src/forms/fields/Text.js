@@ -2,9 +2,9 @@ import React from 'react'
 import classNames from 'classnames'
 import useField from './utils/fieldHook'
 
-const Text = ({ name, placeholder }) => {
+const Text = ({ name, placeholder, label, ChangeCallback }) => {
 
-  const { value, onChange, onFocus, onBlur, active, touched, error } = useField(name)
+  const { value, onChange, onFocus, onBlur, active, touched, error } = useField(name, ChangeCallback)
 
   const cls = classNames('field text-field', {
     'active': active,
@@ -14,6 +14,7 @@ const Text = ({ name, placeholder }) => {
 
   return (
     <div className={cls}>
+      {label && <label htmlFor={name}>{label}</label>}
       <input
         type="text"
         value={value || ''}
@@ -22,6 +23,7 @@ const Text = ({ name, placeholder }) => {
         onBlur={onBlur}
         placeholder={placeholder}
       />
+      {error && <div className="field-error">{error}</div>}
     </div>
   )
 }
